@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</h:head>
+
+	<ui:define name="corpo">
+
+
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" autoUpdate="true" />
+
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoExamesBean.prepararNovoCadastro}" process="@this"
+						update="rn-dialog" oncomplete="PF('edicaoRnDialog').show()">
+						<p:resetInput target="rn-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="rn-dialog"
+						oncomplete="PF('edicaoRnDialog').show()"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+						<p:resetInput target="rn-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoExamesBean.recemNascidoSelecionado}"
+							target="#{gestaoExamesBean.recemNascidoEdicao}" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="rn-table msgs toolbar"
+						action="#{gestaoExamesBean.excluir}"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de Exclusão"
+							message="Tem certeza que deseja excluir o recemNascido?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrow-1-s" title="Exportar para XLS"
+						ajax="false" immediate="true">
+						<p:dataExporter type="xls" target="recemNascidos-table"
+							fileName="recemNascido"></p:dataExporter>
+					</p:commandButton>
+
+
+					<p:commandButton value="Realizar Exame" process="@this"
+						update="rn-dialog" onclick="PF('edicaoExameDialog').show()"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+						<f:setPropertyActionListener
+							value="#{gestaoExamesBean.recemNascidoSelecionado}"
+							target="#{gestaoExamesBean.recemNascidoEdicao}" />
+
+					</p:commandButton>
+
+					<p:dialog header="Realizar Exame" widgetVar="edicaoExameDialog"
+						id="exame-dialog" resizable="false" modal="true"
+						closeOnEscape="true" width="1200" height="600">
+
+
+						<p:messages id="msgs-exame-dialog" />
+						<p:defaultCommand target="salvar-exame-button" scope="rn-dialog" />
+
+						<h:panelGrid columns="1" id="painel-exame-dialog"
+							style=" width: 150px;">
+
+
+							<div align="center">
+								<h1>SNAPPE II (Score for Neonatal Acute Physiology -
+									Perinatal Extension)</h1>
+								<h2>Escore de avalicação de gravidade clínica dos
+									recém-nascidos em unidades neonatais</h2>
+
+
+								<h3>(Considerar as primeiras 24 horas de vida, o pior
+									momento)</h3>
+								<br />
+							</div>
+
+							<br />
+							<br />
+
+							<div align="center">
+
+								<h:panelGrid columns="3">
+
+									<p:outputLabel value="Data do Exame" for="data-exame" />
+									<p:calendar id="data-exame" size="10" maxlength="10"
+										value="#{gestaoExamesBean.recemNascidoExames.dataExame}"
+										pattern="dd/MM/yyyy" mask="99/99/9999">
+									</p:calendar>
+									<h:inputHidden />
+
+									<h:outputLabel value="Variável" />
+
+									<h:outputLabel value="Valores" />
+
+									<h:outputLabel value="Pontos" />
+
+									<p:outputLabel value="1. Pressão arterial média" for="pressao" />
+									<h:selectOneMenu id="pressao"
+										value="#{gestaoExamesBean.recemNascidoExames.pressaoArterialMedia}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems
+											value="#{gestaoExamesBean.pressaoArterialMedia}"
+											var="pressao" itemLabel="#{pressao.descricao}"
+											itemValue="#{pressao}" />
+										<f:ajax listener="#{gestaoExamesBean.pressaoChanged}"
+											render="pressaoLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+
+									<p:outputLabel id="pressaoLabel"
+										value="#{gestaoExamesBean.valorPressaoArterialMedia}" />
+
+									<h:outputLabel name="temperatura" value="2. Temperatura" />
+									<h:selectOneMenu id="temperatura"
+										value="#{gestaoExamesBean.recemNascidoExames.temperatura}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.temperatura}"
+											var="temperatura" itemLabel="#{temperatura.descricao}"
+											itemValue="#{temperatura}" />
+										<f:ajax listener="#{gestaoExamesBean.temperaturaChanged}"
+											render="temperaturaLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="temperaturaLabel"
+										value="#{gestaoExamesBean.valorTemperatura}" />
+
+									<h:outputLabel name="razao"
+										value="3. Razão pO2(mmHg) / FIO2(%)" />
+									<h:selectOneMenu id="razao"
+										value="#{gestaoExamesBean.recemNascidoExames.razao}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.razao}" var="razao"
+											itemLabel="#{razao.descricao}" itemValue="#{razao}" />
+										<f:ajax listener="#{gestaoExamesBean.razaoChanged}"
+											render="razaoLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="razaoLabel"
+										value="#{gestaoExamesBean.valorRazao}" />
+
+									<h:outputLabel name="ph" value="4. pH do sangue" />
+									<h:selectOneMenu id="ph"
+										value="#{gestaoExamesBean.recemNascidoExames.phDoSangue}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.phDoSangue}" var="ph"
+											itemLabel="#{ph.descricao}" itemValue="#{ph}" />
+										<f:ajax listener="#{gestaoExamesBean.phDoSangueChanged}"
+											render="phDoSangueLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="phDoSangueLabel"
+										value="#{gestaoExamesBean.valorPhDoSangue}" />
+
+									<h:outputLabel name="convulsao" value="5. convulsões múltiplas" />
+									<h:selectOneMenu id="convulsoesMultiplas"
+										value="#{gestaoExamesBean.recemNascidoExames.convulsoesMultiplas}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.convulsoesMultiplas}"
+											var="convulsoesMultiplas"
+											itemLabel="#{convulsoesMultiplas.descricao}"
+											itemValue="#{convulsoesMultiplas}" />
+										<f:ajax
+											listener="#{gestaoExamesBean.convulsoesMultiplasChanged}"
+											render="convulsoesMultiplasLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="convulsoesMultiplasLabel"
+										value="#{gestaoExamesBean.valorConvulsoesMultiplas}" />
+
+									<h:outputLabel name="urina"
+										value="6. Volume urinário (mL/kg.h)" />
+									<h:selectOneMenu id="volumeUrinario"
+										value="#{gestaoExamesBean.recemNascidoExames.volumeUrinario}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.volumeUrinario}"
+											var="volumeUrinario" itemLabel="#{volumeUrinario.descricao}"
+											itemValue="#{volumeUrinario}" />
+										<f:ajax listener="#{gestaoExamesBean.volumeUrinarioChanged}"
+											render="volumeUrinarioLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="volumeUrinarioLabel"
+										value="#{gestaoExamesBean.valorVolumeUrinario}" />
+
+									<h:outputLabel name="peso" value="7. Peso ao nascer" />
+									<h:selectOneMenu id="peso"
+										value="#{gestaoExamesBean.recemNascidoExames.pesoAoNascer}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.pesoAoNascer}"
+											var="pesoAoNascer" itemLabel="#{pesoAoNascer.descricao}"
+											itemValue="#{pesoAoNascer}" />
+										<f:ajax listener="#{gestaoExamesBean.pesoAoNascerChanged}"
+											render="pesoAoNascerLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="pesoAoNascerLabel"
+										value="#{gestaoExamesBean.valorPesoAoNascer}" />
+
+									<h:outputLabel name="pig" value="8. PIG (Ver tabela)" />
+									<h:selectOneMenu id="pig"
+										value="#{gestaoExamesBean.recemNascidoExames.pig}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.PIG}" var="pig"
+											itemLabel="#{pig.descricao}" itemValue="#{pig}" />
+										<f:ajax listener="#{gestaoExamesBean.pigChanged}"
+											render="pigLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="pigLabel"
+										value="#{gestaoExamesBean.valorPIG}" />
+
+									<h:outputLabel name="apgar" value="9. Apgar de 5 minutos" />
+									<h:selectOneMenu id="apgar"
+										value="#{gestaoExamesBean.recemNascidoExames.apgarDeCincoMinutos}"
+										style="width:150px;">
+										<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+										<f:selectItems value="#{gestaoExamesBean.apgarDeCincoMinutos}"
+											var="apgarDeCincoMinutos"
+											itemLabel="#{apgarDeCincoMinutos.descricao}"
+											itemValue="#{apgarDeCincoMinutos}" />
+										<f:ajax
+											listener="#{gestaoExamesBean.apgarDeCincoMinutosChanged}"
+											render="apgarDeCincoMinutosLabel" />
+										<f:ajax listener="#{gestaoExamesBean.scoreChanged}"
+											render="score" />
+									</h:selectOneMenu>
+									<p:outputLabel id="apgarDeCincoMinutosLabel"
+										value="#{gestaoExamesBean.valorApgar}" />
+
+									<h:outputLabel name="snappe-score" value="SNAPPE II: "
+										style="float:right;" />
+									<h:outputLabel id="score" name="score"
+										value="#{gestaoExamesBean.totalScore}" />
+
+								</h:panelGrid>
+
+							</div>
+							<br />
+
+							<div align="center">
+								<h:panelGrid>
+									<h:panelGrid columns="2">
+
+										<h:outputText value="Idade Gestacional" />
+
+										<h:outputText value="Percentil 3 (g)" />
+
+										<h:selectOneMenu id="idadeGestacional"
+											value="#{gestaoExamesBean.recemNascidoExames.idadeGestacional}"
+											style="width:150px;">
+											<f:selectItem itemValue="Selecione" noSelectionOption="true" />
+											<f:selectItems value="#{gestaoExamesBean.idadeGestacional}"
+												var="idadeGestacional"
+												itemLabel="#{idadeGestacional.descricao}"
+												itemValue="#{idadeGestacional}" />
+											<f:ajax
+												listener="#{gestaoExamesBean.idadeGestacionalChanged}"
+												render="idadeGestacionalLabel" />
+										</h:selectOneMenu>
+										<p:outputLabel id="idadeGestacionalLabel"
+											value="#{gestaoExamesBean.valorIdadeGestacional}" style="text-align:center" />
+
+									</h:panelGrid>
+
+								</h:panelGrid>
+							</div>
+
+							<p:commandButton value="Salvar" id="salvar-exame-button"
+								process="exame-dialog"
+								update="msgs-exame-dialog painel-exame-dialog rn-table edicaoRnDialog"
+								oncomplete="if(!args.validationFailed) PF('edicaoRnDialog').hide()"
+								ajax="false" actionListener="#{gestaoExamesBean.salvaExame}"
+								onclick="PF('edicaoRnDialog').hide(); " />
+
+							<br />
+
+							<h:panelGrid columns="3">
+
+								<h:panelGrid>
+									<div align="center" class="tabela">
+										<table>
+											<thead>
+												<tr>
+													<td colspan="6">ESCORE DE RISCO PARA ÓBITO - SNAP-PE
+														II PARA OS RN COM PN MENOR QUE 1.500g</td>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<td colspan="6">Fonte: Richardson e colaboradores
+														(2001)</td>
+												</tr>
+											</tfoot>
+											<tbody>
+												<tr>
+													<th></th>
+													<th></th>
+													<th colspan="2" align="center">Óbito observado</th>
+													<th colspan="2" align="center">Óbito esperado</th>
+												</tr>
+												<tr>
+													<td>SNAP-PE II</td>
+													<td>Total</td>
+													<td>Nº</td>
+													<td>%</td>
+													<td>Nº</td>
+													<td>%</td>
+												</tr>
+												<tr>
+													<td align="center" colspan="6" style="font-weight: bold">PN
+														menor 1.500g</td>
+												</tr>
+												<tr>
+													<td>0-9</td>
+													<td>1.526</td>
+													<td>9</td>
+													<td>0,6%</td>
+													<td>7</td>
+													<td>0,5%</td>
+												</tr>
+												<tr>
+													<td>10-19</td>
+													<td>1.092</td>
+													<td>30</td>
+													<td>2,7%</td>
+													<td>24</td>
+													<td>2,2%</td>
+												</tr>
+												<tr>
+													<td>20-29</td>
+													<td>772</td>
+													<td>40</td>
+													<td>5,2%</td>
+													<td>38</td>
+													<td>4,9%</td>
+												</tr>
+												<tr>
+													<td>30-39</td>
+													<td>645</td>
+													<td>61</td>
+													<td>9,5%</td>
+													<td>60</td>
+													<td>9,3%</td>
+												</tr>
+												<tr>
+													<td>40-49</td>
+													<td>497</td>
+													<td>79</td>
+													<td>15,9%</td>
+													<td>78</td>
+													<td>15,7%</td>
+												</tr>
+												<tr>
+													<td>50-59</td>
+													<td>318</td>
+													<td>71</td>
+													<td>22,6%</td>
+													<td>72</td>
+													<td>22,6%</td>
+												</tr>
+												<tr>
+													<td>60-69</td>
+													<td>260</td>
+													<td>85</td>
+													<td>32,7%</td>
+													<td>84</td>
+													<td>32,3%</td>
+												</tr>
+												<tr>
+													<td>70-79</td>
+													<td>121</td>
+													<td>46</td>
+													<td>38,0%</td>
+													<td>53</td>
+													<td>43,8%</td>
+												</tr>
+												<tr>
+													<td>>=80</td>
+													<td>132</td>
+													<td>88</td>
+													<td>66,7%</td>
+													<td>85</td>
+													<td>64,4%</td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</h:panelGrid>
+								<h:panelGrid>
+									<div align="center" class="tabela">
+										<table>
+											<thead>
+												<tr>
+													<td colspan="6">ESCORE DE RISCO PARA ÓBITO - SNAP-PE
+														II PARA OS RN COM PN MENOR QUE 1.500g</td>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<td colspan="6">Fonte: Richardson e colaboradores
+														(2001)</td>
+												</tr>
+											</tfoot>
+											<tbody>
+												<tr>
+													<th></th>
+													<th></th>
+													<th colspan="2" align="center">Óbito observado</th>
+													<th colspan="2" align="center">Óbito esperado</th>
+												</tr>
+												<tr>
+													<td>SNAP-PE II</td>
+													<td>Total</td>
+													<td>Nº</td>
+													<td>%</td>
+													<td>Nº</td>
+													<td>%</td>
+												</tr>
+												<tr>
+													<td align="center" colspan="6" style="font-weight: bold">PN
+														>= 1.500g</td>
+												</tr>
+												<tr>
+													<td>0-9</td>
+													<td>1.526</td>
+													<td>9</td>
+													<td>0,6%</td>
+													<td>7</td>
+													<td>0,5%</td>
+												</tr>
+												<tr>
+													<td>10-19</td>
+													<td>1.092</td>
+													<td>30</td>
+													<td>2,7%</td>
+													<td>24</td>
+													<td>2,2%</td>
+												</tr>
+												<tr>
+													<td>20-29</td>
+													<td>772</td>
+													<td>40</td>
+													<td>5,2%</td>
+													<td>38</td>
+													<td>4,9%</td>
+												</tr>
+												<tr>
+													<td>30-39</td>
+													<td>645</td>
+													<td>61</td>
+													<td>9,5%</td>
+													<td>60</td>
+													<td>9,3%</td>
+												</tr>
+												<tr>
+													<td>40-49</td>
+													<td>497</td>
+													<td>79</td>
+													<td>15,9%</td>
+													<td>78</td>
+													<td>15,7%</td>
+												</tr>
+												<tr>
+													<td>50-59</td>
+													<td>318</td>
+													<td>71</td>
+													<td>22,6%</td>
+													<td>72</td>
+													<td>22,6%</td>
+												</tr>
+												<tr>
+													<td>60-69</td>
+													<td>260</td>
+													<td>85</td>
+													<td>32,7%</td>
+													<td>84</td>
+													<td>32,3%</td>
+												</tr>
+												<tr>
+													<td>70-79</td>
+													<td>121</td>
+													<td>46</td>
+													<td>38,0%</td>
+													<td>53</td>
+													<td>43,8%</td>
+												</tr>
+												<tr>
+													<td>>=80</td>
+													<td>132</td>
+													<td>88</td>
+													<td>66,7%</td>
+													<td>85</td>
+													<td>64,4%</td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</h:panelGrid>
+								<h:panelGrid>
+
+									<div align="center" class="tabela">
+										<table>
+											<thead>
+												<tr>
+													<td colspan="6">ESCORE DE RISCO PARA ÓBITO - SNAP-PE
+														II</td>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<td colspan="6">Fonte: Richardson e colaboradores
+														(2001)</td>
+												</tr>
+											</tfoot>
+											<tbody>
+												<tr>
+													<th></th>
+													<th></th>
+													<th colspan="2" align="center">Óbito observado</th>
+													<th colspan="2" align="center">Óbito esperado</th>
+												</tr>
+												<tr>
+													<td>SNAP-PE II</td>
+													<td>Total</td>
+													<td>Nº</td>
+													<td>%</td>
+													<td>Nº</td>
+													<td>%</td>
+												</tr>
+												<tr>
+													<td align="center" colspan="6" style="font-weight: bold">Todos
+														os PN</td>
+												</tr>
+												<tr>
+													<td>0-9</td>
+													<td>1.526</td>
+													<td>9</td>
+													<td>0,6%</td>
+													<td>7</td>
+													<td>0,5%</td>
+												</tr>
+												<tr>
+													<td>10-19</td>
+													<td>1.092</td>
+													<td>30</td>
+													<td>2,7%</td>
+													<td>24</td>
+													<td>2,2%</td>
+												</tr>
+												<tr>
+													<td>20-29</td>
+													<td>772</td>
+													<td>40</td>
+													<td>5,2%</td>
+													<td>38</td>
+													<td>4,9%</td>
+												</tr>
+												<tr>
+													<td>30-39</td>
+													<td>645</td>
+													<td>61</td>
+													<td>9,5%</td>
+													<td>60</td>
+													<td>9,3%</td>
+												</tr>
+												<tr>
+													<td>40-49</td>
+													<td>497</td>
+													<td>79</td>
+													<td>15,9%</td>
+													<td>78</td>
+													<td>15,7%</td>
+												</tr>
+												<tr>
+													<td>50-59</td>
+													<td>318</td>
+													<td>71</td>
+													<td>22,6%</td>
+													<td>72</td>
+													<td>22,6%</td>
+												</tr>
+												<tr>
+													<td>60-69</td>
+													<td>260</td>
+													<td>85</td>
+													<td>32,7%</td>
+													<td>84</td>
+													<td>32,3%</td>
+												</tr>
+												<tr>
+													<td>70-79</td>
+													<td>121</td>
+													<td>46</td>
+													<td>38,0%</td>
+													<td>53</td>
+													<td>43,8%</td>
+												</tr>
+												<tr>
+													<td>>=80</td>
+													<td>132</td>
+													<td>88</td>
+													<td>66,7%</td>
+													<td>85</td>
+													<td>64,4%</td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</h:panelGrid>
+
+							</h:panelGrid>
+
+
+							<p:outputLabel />
+
+						</h:panelGrid>
+					</p:dialog>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoExamesBean.todosRecemNascidos}"
+				widgetVar="rnTable" var="rn" emptyMessage="Nenhuma RN cadastrado."
+				rows="10" paginator="true" style="margin-top:10px" id="rn-table"
+				selection="#{gestaoExamesBean.recemNascidoSelecionado}"
+				selectionMode="single" rowKey="#{rn.id}"
+				filteredValue="#{gestaoExamesBean.recemNascidosFiltrados}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<f:facet name="header">
+					<p:outputPanel style="text-align:right">
+						<h:outputText value="Pesquisar:" />
+						<p:inputText id="globalFilter" onkeyup="PF('rnTable').filter()"
+							style="width:150px" placeholder="Digite para pesquisar" />
+					</p:outputPanel>
+				</f:facet>
+
+				<p:column filterBy="#{rn.nomePaciente}" headerText="Nome RN"
+					width="250">
+					<h:outputText value="#{rn.nomePaciente}" />
+				</p:column>
+
+				<p:column filterBy="#{rn.prontuario}" headerText="prontuario"
+					width="120">
+					<h:outputText value="#{rn.prontuario}" />
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Novo RN" widgetVar="edicaoRnDialog" id="rn-dialog"
+				resizable="false" modal="true" closeOnEscape="true">
+
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="rn-dialog" />
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+					<p:outputLabel value="
+							Nome RN" for="nome-rn" />
+					<p:inputText id="nome-rn" size="60" maxlength="80"
+						value="#{gestaoExamesBean.recemNascidoEdicao.nomePaciente}" />
+
+					<p:outputLabel value="
+							RN de" for="rn-de" />
+					<p:inputText id="rn-de" size="60" maxlength="80"
+						value="#{gestaoExamesBean.recemNascidoEdicao.recemNascidoDe}" />
+
+					<p:outputLabel value="Prontuário" for="prontuario" />
+					<p:inputMask id="prontuario" size="18" maxlength="18"
+						value="#{gestaoExamesBean.recemNascidoEdicao.prontuario}"
+						mask="99999-9" />
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoExamesBean.salvar}" process="rn-dialog"
+						update="msgs-dialog painel-dialog rn-table"
+						oncomplete="if(!args.validationFailed) PF('edicaoRnDialog').hide()">
+					</p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

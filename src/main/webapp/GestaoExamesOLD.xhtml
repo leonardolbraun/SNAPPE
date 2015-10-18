@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<ui:composition template="/WEB-INF/templates/Layout.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+	<h:head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</h:head>
+
+	<ui:define name="corpo">
+
+		<f:metadata>
+			<f:viewAction action="#{gestaoExamesBean.consultar}" />
+		</f:metadata>
+
+		<h1>Cadastro de recemNascidos</h1>
+
+		<h:form id="frm">
+
+			<p:messages id="msgs" autoUpdate="true" />
+			<p:toolbar id="toolbar">
+				<f:facet name="left">
+
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						action="#{gestaoExamesBean.prepararNovoCadastro}"
+						process="@this" update="recemNascido-dialog"
+						oncomplete="PF('edicaorecemNascidoDialog').show()">
+						<p:resetInput target="recemNascido-dialog" />
+					</p:commandButton>
+
+					<span class="ui-separator"> <span
+						class="ui-icon ui-icon-grip-dotted-vertical" />
+					</span>
+
+					<p:commandButton icon="ui-icon-pencil" title="Editar"
+						process="@this" update="recemNascido-dialog"
+						oncomplete="PF('edicaoRecemNascidoDialog').show()"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+						<p:resetInput target="recemNascido-dialog" />
+
+						<f:setPropertyActionListener
+							value="#{gestaoExamesBean.recemNascidoSelecionado}"
+							target="#{gestaoExamesBean.recemNascidoEdicao}" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						process="@this" update="recemNascidos-table msgs toolbar"
+						action="#{gestaoExamesBean.excluir}"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+
+						<p:confirm icon="ui-icon-alert" header="Confirmação de Exclusão"
+							message="Tem certeza que deseja excluir o recemNascido?" />
+
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-arrow-1-s" title="Exportar para XLS"
+						ajax="false" immediate="true">
+						<p:dataExporter type="xls" target="recemNascidos-table"
+							fileName="recemNascido"></p:dataExporter>
+					</p:commandButton>
+
+
+					<p:commandButton value="exame" process="@this"
+						update="recemNascido-dialog"
+						onclick="PF('edicaoExameDialog').show()"
+						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+						<f:setPropertyActionListener
+							value="#{gestaoExamesBean.recemNascidoSelecionado}"
+							target="#{gestaoExamesBean.recemNascidoEdicao}" />
+
+					</p:commandButton>
+
+					<p:dialog header="exame" widgetVar="edicaoExameDialog"
+						id="exame-dialog" resizable="false" modal="true"
+						closeOnEscape="true">
+
+
+						<p:messages id="msgs-exame-dialog" />
+						<p:defaultCommand target="salvar-exame-button"
+							scope="recemNascido-dialog" />
+
+						<h:panelGrid columns="2" id="painel-exame-dialog">
+
+							<p:outputLabel value="Motivo da exame" for="motivo-exame" />
+							<p:inputText id="motivo-exame" size="60" maxlength="120"
+								value="#{gestaoExamesBean.recemNascidoExames.motivoExame}" />
+
+							<p:outputLabel value="Tipo" for="tipo-exame" />
+							<h:selectOneMenu id="tipo-exame"
+								value="#{gestaoExamesBean.recemNascidoExames.tipo}">
+								<f:selectItem itemLabel="Selecione" />
+								<f:selectItems value="#{gestaoExamesBean.tiposRecemNascidos}"
+									var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							</h:selectOneMenu>
+
+							<p:outputLabel value="Setor" for="setor-exame" />
+							<h:selectOneMenu id="setor-exame"
+								value="#{gestaoExamesBean.recemNascidoExames.setorexamedo}">
+								<f:selectItem itemLabel="Selecione" />
+								<f:selectItems value="#{gestaoExamesBean.todosSetores}"
+									var="setor" itemLabel="#{setor.descricao}"
+									itemValue="#{setor.descricao}" />
+							</h:selectOneMenu>
+
+							<p:outputLabel />
+							<p:commandButton value="Salvar" id="salvar-exame-button"
+								action="#{reportsBean.execute}" process="exame-dialog"
+								update="msgs-exame-dialog painel-exame-dialog recemNascidos-table edicaoExameDialog"
+								oncomplete="if(!args.validationFailed) PF('edicaoExameDialog').hide()"
+								ajax="false"
+								actionListener="#{gestaoExamesBean.salvaExame}"
+								onclick="this.form.target='_blank'; PF('edicaoExameDialog').hide(); " />
+						</h:panelGrid>
+					</p:dialog>
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable value="#{gestaoExamesBean.todosRecemNascidos}"
+				widgetVar="recemNascidosTable" var="recemNascido"
+				emptyMessage="Nenhuma recemNascido cadastrado." rows="10"
+				paginator="true" style="margin-top:10px" id="recemNascidos-table"
+				selection="#{gestaoExamesBean.recemNascidoSelecionado}"
+				selectionMode="single" rowKey="#{recemNascido.id}"
+				filteredValue="#{gestaoExamesBean.recemNascidosFiltrados}">
+
+				<p:ajax event="rowSelect" update=":frm:toolbar" />
+				<p:ajax event="rowUnselect" update=":frm:toolbar" />
+
+				<f:facet name="header">
+					<p:outputPanel style="text-align:right">
+						<h:outputText value="Pesquisar:" />
+						<p:inputText id="globalFilter"
+							onkeyup="PF('recemNascidosTable').filter()" style="width:150px"
+							placeholder="Digite para pesquisar" />
+					</p:outputPanel>
+				</f:facet>
+
+				<p:column filterBy="#{recemNascido.nomeRecemNascido}"
+					headerText="Nome recemNascido" width="250">
+					<h:outputText value="#{recemNascido.nomeRecemNascido}" />
+				</p:column>
+
+
+				<p:column filterBy="#{recemNascido.cpf}" headerText="cpf" width="120">
+					<h:outputText value="#{recemNascido.cpf}" />
+				</p:column>
+
+				<p:column filterBy="#{recemNascido.dataFormatada}"
+					headerText="Data do Cadastro" width="120" patter="dd/MM/yyyy">
+					<h:outputText value="#{recemNascido.dataCadastro}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Novo recemNascido" widgetVar="edicaoRecemNascidoDialog"
+				id="recemNascido-dialog" resizable="false" modal="true"
+				closeOnEscape="true">
+
+
+				<p:messages id="msgs-dialog" />
+				<p:defaultCommand target="salvar-button" scope="recemNascido-dialog" />
+
+
+				<h:panelGrid columns="3" cellpadding="5">
+					<p:photoCam widgetVar="pc"
+						listener="#{gestaoExamesBean.oncapture}"
+						rendered="#{empty gestaoExamesBean.recemNascidoEdicao.foto}"
+						update="@this,photo" />
+
+
+					<p:outputPanel id="photo">
+						<p:graphicImage
+							name="demo/images/photocam/#{gestaoExamesBean.recemNascidoEdicao.foto}.jpeg"
+							rendered="#{not empty gestaoExamesBean.recemNascidoEdicao.foto}" />
+					</p:outputPanel>
+
+					<p:commandButton type="button" value="Capturar"
+						onclick="PF('pc').capture()"
+						rendered="#{empty gestaoExamesBean.recemNascidoEdicao.foto}"
+						update="recemNascido-dialog" />
+
+					<p:commandButton value="Excluir foto"
+						action="#{gestaoExamesBean.apagaFoto}"
+						rendered="#{not empty gestaoExamesBean.recemNascidoEdicao.foto}"
+						immediate="true" update="recemNascido-dialog"
+						oncomplete="PF('edicaoRecemNascidoDialog').show()" />
+
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" id="painel-dialog">
+
+
+					<p:outputLabel value="
+							Nome recemNascido" for="nome-recemNascido" />
+					<p:inputText id="nome-recemNascido" size="60" maxlength="80"
+						value="#{gestaoExamesBean.recemNascidoEdicao.nomeRecemNascido}" />
+
+					<p:outputLabel value="CPF" for="cpf" />
+					<p:inputMask id="cpf" size="18" maxlength="18"
+						value="#{gestaoExamesBean.recemNascidoEdicao.cpf}"
+						mask="999.999.999-99" />
+
+					<p:outputLabel value="Data do Cadastro" for="data-cadastro" />
+					<p:calendar id="data-cadastro" size="10" maxlength="10"
+						value="#{gestaoExamesBean.recemNascidoEdicao.dataCadastro}"
+						pattern="dd/MM/yyyy" mask="99/99/9999">
+					</p:calendar>
+
+					<p:outputLabel />
+					<p:commandButton value="Salvar" id="salvar-button"
+						action="#{gestaoExamesBean.salvar}" process="recemNascido-dialog"
+						update="msgs-dialog painel-dialog recemNascidos-table"
+						oncomplete="if(!args.validationFailed) PF('edicaoRecemNascidoDialog').hide()">
+					</p:commandButton>
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
