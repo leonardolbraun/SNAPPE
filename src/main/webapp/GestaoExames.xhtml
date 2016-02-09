@@ -13,8 +13,6 @@
 
 	<ui:define name="corpo">
 
-
-
 		<h:form id="frm">
 
 			<p:messages id="msgs" autoUpdate="true" />
@@ -44,6 +42,10 @@
 
 					</p:commandButton>
 
+					<p:commandButton icon="ui-icon-search" title="Vizualizar registro"
+						ajax="false" immediate="true">
+					</p:commandButton>
+
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						process="@this" update="rn-table msgs toolbar"
 						action="#{gestaoExamesBean.excluir}"
@@ -56,7 +58,7 @@
 
 					<p:commandButton icon="ui-icon-arrow-1-s" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="recemNascidos-table"
+						<p:dataExporter type="xls" target="rn-table"
 							fileName="recemNascido"></p:dataExporter>
 					</p:commandButton>
 
@@ -102,10 +104,20 @@
 								<h:panelGrid columns="3">
 
 									<p:outputLabel value="Data do Exame" for="data-exame" />
-									<p:calendar id="data-exame" size="10" maxlength="10"
-										value="#{gestaoExamesBean.recemNascidoExames.dataExame}"
-										pattern="dd/MM/yyyy" mask="99/99/9999">
-									</p:calendar>
+									<h:panelGroup>
+										<p:calendar id="data-exame" size="16" maxlength="16"
+											value="#{gestaoExamesBean.recemNascidoExames.dataExame}"
+											pattern="dd/MM/yyyy HH:mm" mask="99/99/9999 99:99"
+											locale="pt" />
+										<p:spacer width="4" height="10" />
+										<p:commandButton icon="ui-icon-clock" styleClass="clock"
+											immediate="true">
+											<f:ajax listener="#{gestaoExamesBean.horaExameChanged}"
+												render="data-exame" />
+										</p:commandButton>
+									</h:panelGroup>
+
+
 									<h:inputHidden />
 
 									<h:outputLabel value="Variável" />
@@ -266,7 +278,7 @@
 									<h:outputLabel name="snappe-score" value="SNAPPE II: "
 										style="float:right;" />
 									<h:outputLabel id="score" name="score"
-										value="#{gestaoExamesBean.totalScore}" />
+										value="#{gestaoExamesBean.recemNascidoExames.totalScore}" />
 
 								</h:panelGrid>
 
@@ -294,7 +306,8 @@
 												render="idadeGestacionalLabel" />
 										</h:selectOneMenu>
 										<p:outputLabel id="idadeGestacionalLabel"
-											value="#{gestaoExamesBean.valorIdadeGestacional}" style="text-align:center" />
+											value="#{gestaoExamesBean.valorIdadeGestacional}"
+											style="text-align:center" />
 
 									</h:panelGrid>
 
@@ -696,20 +709,49 @@
 
 				<h:panelGrid columns="2" id="painel-dialog">
 
+					<p:outputLabel value="Prontuário" for="prontuario" />
+					<p:inputMask id="prontuario" size="18" maxlength="18"
+						value="#{gestaoExamesBean.recemNascidoEdicao.prontuario}"
+						mask="99999-9" />
+
 					<p:outputLabel value="
 							Nome RN" for="nome-rn" />
 					<p:inputText id="nome-rn" size="60" maxlength="80"
 						value="#{gestaoExamesBean.recemNascidoEdicao.nomePaciente}" />
 
+					<p:outputLabel for="sexoRn" value="Sexo" />
+					<h:selectOneRadio id="sexoRn"
+						value="#{gestaoExamesBean.recemNascidoEdicao.sexoRn}">
+						<f:selectItems value="#{gestaoExamesBean.tiposSexo}"
+							var="tipoSexo" itemLabel="#{tipoSexo.descricao}"
+							itemValue="#{tipoLancamento}" />
+					</h:selectOneRadio>
+
+					<p:outputLabel value="Dia e Hora do Nascimento"
+						for="data-nascimento" />
+					<p:calendar id="data-nascimento" size="16" maxlength="16"
+						value="#{gestaoExamesBean.recemNascidoEdicao.dataNascimento}"
+						pattern="dd/MM/yyyy HH:mm" mask="99/99/9999 99:99" locale="pt" />
+
+					<p:outputLabel value="Prontuário da Mãe" for="prontuarioMae" />
+					<p:inputMask id="prontuarioMae" size="18" maxlength="18"
+						value="#{gestaoExamesBean.recemNascidoEdicao.prontuarioMae}"
+						mask="99999-9" />
+
 					<p:outputLabel value="
-							RN de" for="rn-de" />
+							Nome da Mãe" for="rn-de" />
 					<p:inputText id="rn-de" size="60" maxlength="80"
 						value="#{gestaoExamesBean.recemNascidoEdicao.recemNascidoDe}" />
 
-					<p:outputLabel value="Prontuário" for="prontuario" />
-					<p:inputMask id="prontuario" size="18" maxlength="18"
-						value="#{gestaoExamesBean.recemNascidoEdicao.prontuario}"
-						mask="99999-9" />
+					<p:outputLabel value="
+							Idade da Mãe" for="idade-mae" />
+					<p:inputMask id="idade-mae" size="60" maxlength="80"
+						value="#{gestaoExamesBean.recemNascidoEdicao.idadeMae}" mask="99" />
+
+
+					<p:outputLabel value="RN externo?" />
+					<h:selectBooleanCheckbox id="rnExterno"
+						value="#{gestaoExamesBean.recemNascidoEdicao.rnExterno}" />
 
 					<p:outputLabel />
 					<p:commandButton value="Salvar" id="salvar-button"

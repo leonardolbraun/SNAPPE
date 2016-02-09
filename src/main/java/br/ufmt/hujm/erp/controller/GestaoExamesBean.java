@@ -1,7 +1,10 @@
 package br.ufmt.hujm.erp.controller;
 
+import java.awt.image.RescaleOp;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +25,7 @@ import br.ufmt.hujm.erp.model.PhDoSangue;
 import br.ufmt.hujm.erp.model.PressaoArterialMedia;
 import br.ufmt.hujm.erp.model.Razao;
 import br.ufmt.hujm.erp.model.RecemNascido;
+import br.ufmt.hujm.erp.model.Sexo;
 import br.ufmt.hujm.erp.model.Temperatura;
 import br.ufmt.hujm.erp.model.Exames;
 import br.ufmt.hujm.erp.model.VolumeUrinario;
@@ -379,7 +383,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("23"))
 			valorIdadeGestacional = "380";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("24"))
 			valorIdadeGestacional = "430";
@@ -387,7 +391,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("25"))
 			valorIdadeGestacional = "500";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("26"))
 			valorIdadeGestacional = "580";
@@ -395,7 +399,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("27"))
 			valorIdadeGestacional = "670";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("28"))
 			valorIdadeGestacional = "740";
@@ -403,7 +407,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("29"))
 			valorIdadeGestacional = "820";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("30"))
 			valorIdadeGestacional = "920";
@@ -411,7 +415,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("31"))
 			valorIdadeGestacional = "1030";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("32"))
 			valorIdadeGestacional = "1140";
@@ -419,7 +423,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("33"))
 			valorIdadeGestacional = "1280";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("34"))
 			valorIdadeGestacional = "1420";
@@ -427,7 +431,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("35"))
 			valorIdadeGestacional = "1580";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("36"))
 			valorIdadeGestacional = "1750";
@@ -435,7 +439,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("37"))
 			valorIdadeGestacional = "1920";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("38"))
 			valorIdadeGestacional = "2120";
@@ -443,7 +447,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("39"))
 			valorIdadeGestacional = "2350";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("40"))
 			valorIdadeGestacional = "2520";
@@ -451,7 +455,7 @@ public class GestaoExamesBean implements Serializable {
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals("41"))
 			valorIdadeGestacional = "2660";
-		
+
 		if (recemNascidoExames.getIdadeGestacional().getDescricao()
 				.equals(">41"))
 			valorIdadeGestacional = "2750";
@@ -459,12 +463,7 @@ public class GestaoExamesBean implements Serializable {
 
 	// fim Apgar
 
-	// calcular geral
-	private String totalScore = new String();
-
-	public String getTotalScore() {
-		return totalScore;
-	}
+	// calcular geral o SNAPPE (SCORE TOTAL)
 
 	public void scoreChanged(AjaxBehaviorEvent even) {
 		Integer score = new Integer(0);
@@ -493,11 +492,28 @@ public class GestaoExamesBean implements Serializable {
 		if (valorApgar != null)
 			score += new Integer(valorApgar);
 
-		totalScore = score.toString();
-		System.out
-				.println("vlo " + totalScore + "e nuemro " + score.toString());
+		recemNascidoExames.setTotalScore(score.toString());
 
 	}
+
+	// Seta a hora quando o botão do relógio é pressionado
+
+	public Date getDataAtual() {
+
+		Date minhaData = new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(minhaData);
+		minhaData = calendar.getTime();
+		return minhaData;
+	}
+
+	public void horaExameChanged(AjaxBehaviorEvent even) {
+		System.out.println(recemNascidoExames.getDataExame());
+		recemNascidoExames.setDataExame(this.getDataAtual());
+		System.out.println(recemNascidoExames.getDataExame());
+	}
+
+	// fim data
 
 	public RecemNascido getRecemNascidoEdicao() {
 		return recemNascidoEdicao;
@@ -574,6 +590,10 @@ public class GestaoExamesBean implements Serializable {
 
 	public IdadeGestacional[] getIdadeGestacional() {
 		return IdadeGestacional.values();
+	}
+
+	public Sexo[] getTiposSexo() {
+		return Sexo.values();
 	}
 
 }

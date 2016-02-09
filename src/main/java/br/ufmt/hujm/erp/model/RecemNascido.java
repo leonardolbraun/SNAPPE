@@ -1,15 +1,21 @@
 package br.ufmt.hujm.erp.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -35,8 +41,65 @@ public class RecemNascido implements Serializable {
 	@Column(name = "prontuario", nullable = false, length = 18, unique = true)
 	private String prontuario;
 	
+	@NotNull
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data_nascimento", nullable = false)
+	private Date dataNascimento;
+	
 	@OneToMany(mappedBy = "recemNascido", targetEntity = Exames.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Exames> exames;
+	
+	@Column(name = "rn_externo")
+	private Boolean rnExterno;
+	
+	private Sexo sexoRn;
+	
+	@Column(name = "prontuario_mae", nullable = false, length = 18, unique = true)
+	private String prontuarioMae;
+	
+	@Column(name = "idade_mae")
+	private String idadeMae;
+	
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+	@Enumerated(EnumType.STRING)
+	public Sexo getSexoRn() {
+		return sexoRn;
+	}
+
+	public void setSexoRn(Sexo sexoRn) {
+		this.sexoRn = sexoRn;
+	}
+
+	public String getProntuarioMae() {
+		return prontuarioMae;
+	}
+
+	public void setProntuarioMae(String prontuarioMae) {
+		this.prontuarioMae = prontuarioMae;
+	}
+
+	public String getIdadeMae() {
+		return idadeMae;
+	}
+
+	public void setIdadeMae(String idadeMae) {
+		this.idadeMae = idadeMae;
+	}
+
+	public Boolean getRnExterno() {
+		return rnExterno;
+	}
+
+	public void setRnExterno(Boolean rnExterno) {
+		this.rnExterno = rnExterno;
+	}
 
 	public String getNomePaciente() {
 		return nomePaciente;

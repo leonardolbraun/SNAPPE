@@ -28,9 +28,12 @@ public class Exames implements Serializable {
 	private Long id;
 
 	@NotNull
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "data_exame")
 	private Date dataExame;
+	
+	@Column(name = "total_score", nullable = false, length = 5)
+	private String totalScore;
 
 	@ManyToOne
 	@JoinColumn(name = "recemNascido_id")
@@ -75,6 +78,14 @@ public class Exames implements Serializable {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private IdadeGestacional idadeGestacional;
+	
+	public String getTotalScore() {
+		return totalScore;
+	}
+
+	public void setTotalScore(String totalScore) {
+		this.totalScore = totalScore;
+	}
 
 	public String getDataFormatada() {
 		return new SimpleDateFormat("dd/MM/yyyy").format(dataExame);

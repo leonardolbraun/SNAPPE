@@ -31,8 +31,11 @@
 
 					<p:commandButton icon="ui-icon-arrow-1-s" title="Exportar para XLS"
 						ajax="false" immediate="true">
-						<p:dataExporter type="xls" target="exames-table"
-							fileName="exames"></p:dataExporter>
+						<p:dataExporter type="xls" target="exames-table" fileName="exames"></p:dataExporter>
+					</p:commandButton>
+
+					<p:commandButton icon="ui-icon-search" title="Vizualizar registro"
+						ajax="false" immediate="true">
 					</p:commandButton>
 
 				</f:facet>
@@ -58,19 +61,22 @@
 				</f:facet>
 
 				<p:column filterBy="#{exame.recemNascido.nomePaciente}"
-					headerText="Nome exame" width="250">
+					headerText="Nome do RN" width="250">
 					<h:outputText value="#{exame.recemNascido.nomePaciente}" />
 				</p:column>
 
-				<p:column filterBy="#{exame.prontuario}"
-					headerText="Prontuario">
+				<p:column filterBy="#{exame.recemNascido.prontuario}" headerText="Prontuario">
 					<h:outputText value="#{exame.recemNascido.prontuario}" />
 				</p:column>
 
+				<p:column filterBy="#{exame.totalScore}" headerText="Score">
+					<h:outputText value="#{exame.totalScore}" />
+				</p:column>
+
 				<p:column filterBy="#{exame.dataFormatada}" headerText="dataExame"
-					width="120" patter="dd/MM/yyyy">
+					width="120" patter="dd/MM/yyyy HH:mm">
 					<h:outputText value="#{exame.dataExame}">
-						<f:convertDateTime pattern="dd/MM/yyyy" />
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
 					</h:outputText>
 				</p:column>
 
