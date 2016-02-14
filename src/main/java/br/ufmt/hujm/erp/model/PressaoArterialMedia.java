@@ -4,7 +4,7 @@ public enum PressaoArterialMedia {
 
 	NAOAVALIADA("Não avaliada"), 
 	MENORIGUAL30(">= 30 mmHg"),
-	VINTEAVINTENOVE("20 - 29 mmHg"),
+	P20A29("20 - 29 mmHg"),
 	MENOR20("menor 20 mmHg");
 	
 	private String descricao;

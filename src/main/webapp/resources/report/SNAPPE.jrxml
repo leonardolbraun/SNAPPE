@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SNAPPE" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="72117679-1149-40a0-b697-35c144098ade">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="idExame" class="java.lang.String">
+		<defaultValueExpression><![CDATA[$F{Exames_id}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     Exames.`id` AS Exames_id,
+     Exames.`apgarDeCincoMinutos` AS Exames_apgarDeCincoMinutos,
+     Exames.`convulsoesMultiplas` AS Exames_convulsoesMultiplas,
+     Exames.`data_exame` AS Exames_data_exame,
+     Exames.`idadeGestacional` AS Exames_idadeGestacional,
+     Exames.`pesoAoNascer` AS Exames_pesoAoNascer,
+     Exames.`phDoSangue` AS Exames_phDoSangue,
+     Exames.`pig` AS Exames_pig,
+     Exames.`pressaoArterialMedia` AS Exames_pressaoArterialMedia,
+     Exames.`razao` AS Exames_razao,
+     Exames.`temperatura` AS Exames_temperatura,
+     Exames.`total_score` AS Exames_total_score,
+     Exames.`volumeUrinario` AS Exames_volumeUrinario,
+     Exames.`recemNascido_id` AS Exames_recemNascido_id,
+     RecemNascido.`id` AS RecemNascido_id,
+     RecemNascido.`data_nascimento` AS RecemNascido_data_nascimento,
+     RecemNascido.`idade_mae` AS RecemNascido_idade_mae,
+     RecemNascido.`nome_paciente` AS RecemNascido_nome_paciente,
+     RecemNascido.`prontuario` AS RecemNascido_prontuario,
+     RecemNascido.`prontuario_mae` AS RecemNascido_prontuario_mae,
+     RecemNascido.`recemNascidoDe_de` AS RecemNascido_recemNascidoDe_de,
+     RecemNascido.`rn_externo` AS RecemNascido_rn_externo,
+     Exames.`rn_internado` AS Exames_rn_internado,
+     Exames.`rn_liberado` AS Exames_rn_liberado,
+     Exames.`rn_semsuporte` AS Exames_rn_semsuporte,
+     RecemNascido_A.`id` AS RecemNascido_A_id,
+     RecemNascido_A.`data_nascimento` AS RecemNascido_A_data_nascimento,
+     RecemNascido_A.`idade_mae` AS RecemNascido_A_idade_mae,
+     RecemNascido_A.`nome_paciente` AS RecemNascido_A_nome_paciente,
+     RecemNascido_A.`prontuario` AS RecemNascido_A_prontuario,
+     RecemNascido_A.`prontuario_mae` AS RecemNascido_A_prontuario_mae,
+     RecemNascido_A.`recemNascidoDe_de` AS RecemNascido_A_recemNascidoDe_de,
+     RecemNascido_A.`rn_externo` AS RecemNascido_A_rn_externo,
+     Exames_A.`id` AS Exames_A_id,
+     Exames_A.`apgarDeCincoMinutos` AS Exames_A_apgarDeCincoMinutos,
+     Exames_A.`convulsoesMultiplas` AS Exames_A_convulsoesMultiplas,
+     Exames_A.`data_exame` AS Exames_A_data_exame,
+     Exames_A.`idadeGestacional` AS Exames_A_idadeGestacional,
+     Exames_A.`pesoAoNascer` AS Exames_A_pesoAoNascer,
+     Exames_A.`phDoSangue` AS Exames_A_phDoSangue,
+     Exames_A.`pig` AS Exames_A_pig,
+     Exames_A.`pressaoArterialMedia` AS Exames_A_pressaoArterialMedia,
+     Exames_A.`razao` AS Exames_A_razao,
+     Exames_A.`rn_internado` AS Exames_A_rn_internado,
+     Exames_A.`rn_liberado` AS Exames_A_rn_liberado,
+     Exames_A.`rn_semsuporte` AS Exames_A_rn_semsuporte,
+     Exames_A.`temperatura` AS Exames_A_temperatura,
+     Exames_A.`total_score` AS Exames_A_total_score,
+     Exames_A.`volumeUrinario` AS Exames_A_volumeUrinario,
+     Exames_A.`recemNascido_id` AS Exames_A_recemNascido_id,
+     RecemNascido.`sexoRn` AS RecemNascido_sexoRn,
+     RecemNascido_A.`sexoRn` AS RecemNascido_A_sexoRn
+FROM
+     `RecemNascido` RecemNascido INNER JOIN `Exames` Exames_A ON RecemNascido.`id` = Exames_A.`recemNascido_id`,
+     `Exames` Exames,
+     `RecemNascido` RecemNascido_A
+WHERE
+    Exames.id = $P{idExame}]]>
+	</queryString>
+	<field name="Exames_id" class="java.lang.Long"/>
+	<field name="Exames_apgarDeCincoMinutos" class="java.lang.String"/>
+	<field name="Exames_convulsoesMultiplas" class="java.lang.String"/>
+	<field name="Exames_data_exame" class="java.sql.Timestamp"/>
+	<field name="Exames_idadeGestacional" class="java.lang.String"/>
+	<field name="Exames_pesoAoNascer" class="java.lang.String"/>
+	<field name="Exames_phDoSangue" class="java.lang.String"/>
+	<field name="Exames_pig" class="java.lang.String"/>
+	<field name="Exames_pressaoArterialMedia" class="java.lang.String"/>
+	<field name="Exames_razao" class="java.lang.String"/>
+	<field name="Exames_temperatura" class="java.lang.String"/>
+	<field name="Exames_total_score" class="java.lang.String"/>
+	<field name="Exames_volumeUrinario" class="java.lang.String"/>
+	<field name="Exames_recemNascido_id" class="java.lang.Long"/>
+	<field name="RecemNascido_id" class="java.lang.Long"/>
+	<field name="RecemNascido_data_nascimento" class="java.sql.Timestamp"/>
+	<field name="RecemNascido_idade_mae" class="java.lang.String"/>
+	<field name="RecemNascido_nome_paciente" class="java.lang.String"/>
+	<field name="RecemNascido_prontuario" class="java.lang.String"/>
+	<field name="RecemNascido_prontuario_mae" class="java.lang.String"/>
+	<field name="RecemNascido_recemNascidoDe_de" class="java.lang.String"/>
+	<field name="RecemNascido_rn_externo" class="java.lang.Boolean"/>
+	<field name="Exames_rn_internado" class="java.lang.Boolean"/>
+	<field name="Exames_rn_liberado" class="java.lang.Boolean"/>
+	<field name="Exames_rn_semsuporte" class="java.lang.Boolean"/>
+	<field name="RecemNascido_A_id" class="java.lang.Long"/>
+	<field name="RecemNascido_A_data_nascimento" class="java.sql.Timestamp"/>
+	<field name="RecemNascido_A_idade_mae" class="java.lang.String"/>
+	<field name="RecemNascido_A_nome_paciente" class="java.lang.String"/>
+	<field name="RecemNascido_A_prontuario" class="java.lang.String"/>
+	<field name="RecemNascido_A_prontuario_mae" class="java.lang.String"/>
+	<field name="RecemNascido_A_recemNascidoDe_de" class="java.lang.String"/>
+	<field name="RecemNascido_A_rn_externo" class="java.lang.Boolean"/>
+	<field name="Exames_A_id" class="java.lang.Long"/>
+	<field name="Exames_A_apgarDeCincoMinutos" class="java.lang.String"/>
+	<field name="Exames_A_convulsoesMultiplas" class="java.lang.String"/>
+	<field name="Exames_A_data_exame" class="java.sql.Timestamp"/>
+	<field name="Exames_A_idadeGestacional" class="java.lang.String"/>
+	<field name="Exames_A_pesoAoNascer" class="java.lang.String"/>
+	<field name="Exames_A_phDoSangue" class="java.lang.String"/>
+	<field name="Exames_A_pig" class="java.lang.String"/>
+	<field name="Exames_A_pressaoArterialMedia" class="java.lang.String"/>
+	<field name="Exames_A_razao" class="java.lang.String"/>
+	<field name="Exames_A_rn_internado" class="java.lang.Boolean"/>
+	<field name="Exames_A_rn_liberado" class="java.lang.Boolean"/>
+	<field name="Exames_A_rn_semsuporte" class="java.lang.Boolean"/>
+	<field name="Exames_A_temperatura" class="java.lang.String"/>
+	<field name="Exames_A_total_score" class="java.lang.String"/>
+	<field name="Exames_A_volumeUrinario" class="java.lang.String"/>
+	<field name="Exames_A_recemNascido_id" class="java.lang.Long"/>
+	<field name="RecemNascido_sexoRn" class="java.lang.String"/>
+	<field name="RecemNascido_A_sexoRn" class="java.lang.String"/>
+	<group name="Group1">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
+		<groupHeader>
+			<band height="31">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="7" width="555" height="24" forecolor="#B89F7D" backcolor="#9DB1B8" uuid="e5d4b0f9-6080-4825-b8e3-407e66b3b89a"/>
+				</frame>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="SubTitle" isPrintRepeatedValues="false" x="0" y="8" width="479" height="23" forecolor="#FFFFFF" uuid="c39d2adb-f08d-445a-b46c-961472ba64eb"/>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Dados do RN"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="4"/>
+		</groupFooter>
+	</group>
+	<group name="Group2">
+		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/5)]]></groupExpression>
+		<groupHeader>
+			<band height="24"/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="121" splitType="Stretch">
+			<staticText>
+				<reportElement style="Title" x="152" y="59" width="255" height="62" uuid="3fe9748c-93b2-4c30-b8de-39dd9238acd8"/>
+				<textElement>
+					<font size="48" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SNAP-PE II]]></text>
+			</staticText>
+			<image>
+				<reportElement x="9" y="20" width="146" height="42" uuid="7f3b977e-ea88-4c41-90e5-8ca9b7bdc2a9"/>
+				<imageExpression><![CDATA["/Users/leonardo/Pictures/ebserh.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="389" y="10" width="160" height="70" uuid="31326438-cc62-4d11-bda7-88a4dbddb9ca"/>
+				<imageExpression><![CDATA["/Users/leonardo/Pictures/logohujm.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="440" splitType="Stretch">
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="0" width="70" height="18" forecolor="#000000" uuid="6d92216f-df46-4278-83b5-92e31cad8888"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[ID:]]></text>
+			</staticText>
+			<elementGroup>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="0" width="300" height="18" uuid="c5ba57f5-5df8-4dd2-b6d6-10d357ff9b32"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_id}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="18" width="300" height="18" uuid="463ed803-985d-4201-9bbe-2a7e782e57f8"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_nome_paciente}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="36" width="300" height="18" uuid="d1a604c3-31a7-44e2-822e-53d6140db434"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_prontuario}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="126" width="300" height="18" uuid="53295495-3af1-4429-808f-2f744a095874"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_recemNascidoDe_de}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="205" width="311" height="18" uuid="0e2d4527-0878-4701-b557-66baf4a0e388"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Exames_data_exame}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="241" width="338" height="18" uuid="3bbe7254-546e-4704-a40a-13b9799b636f"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_temperatura} == "T35V6" ? " > 35,6ºC" :
+$F{Exames_temperatura} == "T35A35V6" ? "35 - 35,6ºC" : $F{Exames_temperatura} == "T35" ? "35ºC" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="259" width="255" height="18" uuid="ebb80964-f609-4c6e-a5ca-f66fb2323ccf"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_razao} == "NAOEXISTENTE" ? "Não existente" :
+$F{Exames_razao} == "R2V49" ? "> 2,49" : $F{Exames_razao} == "R1A2V49" ? "1 - 2,49" :
+$F{Exames_razao} == "R0V3A0V99" ? "0,3 - 0,99" : $F{Exames_razao} == "MENOR0V30" ? "menor 0,3" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="277" width="255" height="18" uuid="8ffdeb04-2928-4b8b-ae86-90c08a42d144"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_phDoSangue} == "NAOREALIZADO" ? "Não realizado" :
+$F{Exames_phDoSangue} == "MAIOIGUAL7V20" ? ">= 7,20" : $F{Exames_phDoSangue} == "PH7V10A7V19" ? "7,10 - 7,19" :
+$F{Exames_phDoSangue} == "MENOR7V10" ? "menor 7,10" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="295" width="255" height="18" uuid="4cbbe776-69da-47b9-a772-c32fc0b406b5"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Exames_convulsoesMultiplas}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="313" width="255" height="18" uuid="5b958d48-6fad-4c47-81f8-4d7af6200d87"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_volumeUrinario} == "NAOMEDIDO" ? "Não medido (RN bem)" :
+$F{Exames_volumeUrinario} == "MENORIGUAL1" ? ">= 1" : $F{Exames_volumeUrinario} == "V0V1A0V99" ? "0,1 - 0,99 (oligúria)" :
+$F{Exames_volumeUrinario} == "MENOR0V1" ? "menor 0,1 (anúria)" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="331" width="255" height="18" uuid="b31b2200-d442-4910-9247-ea3818df4c7a"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_pesoAoNascer} == "MAIOROUIGUAL1000" ? " >= 1.000 g" :
+$F{Exames_pesoAoNascer} == "P750a999" ? "750 - 999 g" : $F{Exames_pesoAoNascer} == "MENORQUE750" ? "menor 750 g" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="349" width="255" height="18" uuid="f6aca387-a927-45a1-a652-b6257ddda80c"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_pig} == "MAIORIGUALPERCENTIL3" ? ">= percentil 3" :
+$F{Exames_pig} == "MENORPERCENTIL3" ? "menor percentil 3" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="367" width="255" height="18" uuid="97279d23-181d-4436-ac62-117830598e83"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_apgarDeCincoMinutos} == "MAIORIGUALSETE" ? ">= 7" :
+$F{Exames_apgarDeCincoMinutos} == "MENORSETE" ? "menor 7" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="385" width="255" height="18" uuid="f6506091-e08c-48ac-b0c3-a4ede8d8c6a1"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_idadeGestacional} == "I22" ? "22" :
+$F{Exames_idadeGestacional} == "I23" ? "23" :
+$F{Exames_idadeGestacional} == "I24" ? "24" :
+$F{Exames_idadeGestacional} == "I25" ? "25" :
+$F{Exames_idadeGestacional} == "I26" ? "26" :
+$F{Exames_idadeGestacional} == "I27" ? "27" :
+$F{Exames_idadeGestacional} == "I28" ? "28" :
+$F{Exames_idadeGestacional} == "I29" ? "29" :
+$F{Exames_idadeGestacional} == "I30" ? "30" :
+$F{Exames_idadeGestacional} == "I31" ? "31" :
+$F{Exames_idadeGestacional} == "I32" ? "32" :
+$F{Exames_idadeGestacional} == "I33" ? "33" :
+$F{Exames_idadeGestacional} == "I34" ? "34" :
+$F{Exames_idadeGestacional} == "I35" ? "35" :
+$F{Exames_idadeGestacional} == "I36" ? "36" :
+$F{Exames_idadeGestacional} == "I37" ? "37" :
+$F{Exames_idadeGestacional} == "I38" ? "38" :
+$F{Exames_idadeGestacional} == "I39" ? "39" :
+$F{Exames_idadeGestacional} == "I40" ? "40" :
+$F{Exames_idadeGestacional} == "I41" ? "41" :
+$F{Exames_idadeGestacional} == "MAIORQUE41" ? ">41" :  "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="223" width="255" height="18" uuid="98db41b3-5582-4195-9131-a378214f2b88"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Exames_pressaoArterialMedia} == "NAOAVALIADA" ? "Não avaliada" :
+$F{Exames_pressaoArterialMedia} == "MENORIGUAL30" ? ">= 30 mmHg" : $F{Exames_pressaoArterialMedia} == "P20A29" ? "20 - 29 mmHg" :
+$F{Exames_pressaoArterialMedia} == "MENOR20" ? "menor 20 mmHg" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="144" width="297" height="18" uuid="ef5b6b32-c0fd-44d1-b95f-c436cf9d151d"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_prontuario_mae}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="108" width="300" height="18" uuid="66bb5711-8900-4297-9e31-8382cdca66e2"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_idade_mae}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="54" width="300" height="18" uuid="10eb8261-1231-43d6-aced-4b8d18c381d0"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_data_nascimento}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="72" width="300" height="18" uuid="d029f6ae-a278-46fe-b854-8b6231854070"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RecemNascido_A_sexoRn}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="166" y="90" width="300" height="18" uuid="b8ad5216-1cd9-41af-be9d-a4a044807198"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{RecemNascido_rn_externo} == "TRUE" ? "Sim" :
+$F{RecemNascido_rn_externo} == "FALSE" ? "Não" : "Sem dados")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="Detail" positionType="Float" x="211" y="403" width="255" height="18" uuid="631fb52e-e3a8-4d2f-a82f-964b3a380894"/>
+					<textElement>
+						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Exames_total_score}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<frame>
+				<reportElement x="237" y="33" width="100" height="20" uuid="d068444b-881c-484f-af23-0d44db21f3d2"/>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="171" width="555" height="24" forecolor="#B89F7D" backcolor="#9DB1B8" uuid="99653073-06e5-4dcb-b852-fbec87a03cc6"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement style="SubTitle" isPrintRepeatedValues="false" x="9" y="2" width="479" height="22" forecolor="#FFFFFF" uuid="5d576cf9-9148-472e-be64-9b713eb97345"/>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Dados do SNAP-PE II"]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="205" width="199" height="18" forecolor="#000000" uuid="43546905-afb7-413c-8bf2-5263c7e08e10"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Data do Exame:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="223" width="199" height="18" forecolor="#000000" uuid="cea30c51-7d29-4039-9ec7-99f496edc26d"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[1. Pressão arterial média:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="241" width="199" height="18" forecolor="#000000" uuid="36b8d97c-530f-4139-90ff-8a108ae05c66"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[2. Temperatura:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="277" width="199" height="18" forecolor="#000000" uuid="3bbad169-91ac-4b05-b899-ec409a172057"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[4. pH do sangue:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="259" width="199" height="18" forecolor="#000000" uuid="758c86e2-3c7f-4a13-b7f8-6e1ceaa67567"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[3. Razão pO2(mmHg) / FIO2(%):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="295" width="199" height="18" forecolor="#000000" uuid="5a251608-9409-426c-90d3-641bcc7c2aad"/>
+				<textElement>
+					<font isBold="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[5. convulsões múltiplas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="313" width="199" height="18" forecolor="#000000" uuid="4eecdff8-7b45-4912-9549-6fc82d44da49"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[6. Volume urinário (mL/kg.h):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="331" width="199" height="18" forecolor="#000000" uuid="11a31136-4a90-46d9-af84-1f8d33838ba8"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[7. Peso ao nascer:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="349" width="199" height="18" forecolor="#000000" uuid="d3cbd453-71a2-4d97-936a-ff177de8c3a9"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[8. PIG (Ver tabela):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="367" width="199" height="18" forecolor="#000000" uuid="83b42b47-5a5a-4bd1-956b-9584e40ba349"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[9. Apgar de 5 minutos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="385" width="199" height="18" forecolor="#000000" uuid="2f3bae00-4a7d-426d-b9ea-39bcd3d5e144"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Idade Gestacional:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="18" width="70" height="18" forecolor="#000000" uuid="64a2c95a-73ce-4c32-b192-85ed60d364ac"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="36" width="70" height="18" forecolor="#000000" uuid="e38b18b5-d7dc-4148-b5cb-da4ec96378c9"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Prontuário:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="126" width="70" height="18" forecolor="#000000" uuid="055a4ad6-3103-4f4e-94b8-d23520d83948"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nome Mãe:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="144" width="94" height="18" forecolor="#000000" uuid="77486201-851c-4632-a9f4-e62988878831"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Prontuário Mãe:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="108" width="70" height="18" forecolor="#000000" uuid="c15316a6-ada0-45ab-9c84-08216c77736e"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Idade Mãe:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="54" width="108" height="18" forecolor="#000000" uuid="29591368-8eeb-4bbe-802f-4699d18965fb"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Data Nascimento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="72" width="70" height="18" forecolor="#000000" uuid="c8449638-1233-4af3-aa07-6c96bf1b2460"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sexo RN:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="58" y="90" width="82" height="18" forecolor="#000000" uuid="9fab8136-715f-4310-b45c-7eda0d813cc5"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[RN Externo?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="Column header" positionType="Float" x="2" y="403" width="199" height="18" forecolor="#000000" uuid="b33528c5-54a4-46a5-ab1c-b7c5a9f9ae74"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Total da pontuação:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="6133bf14-b089-4f86-829e-5b982160b00d"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="-1" width="555" height="15" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="eb54a11e-1061-499c-b257-93f51a947aa7"/>
+				<textField evaluationTime="Report">
+					<reportElement style="Column header" x="513" y="1" width="40" height="13" forecolor="#FFFFFF" uuid="6fa37584-aa37-434f-b060-cc6a44c5451b"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement style="Column header" x="2" y="0" width="197" height="13" forecolor="#FFFFFF" uuid="9deecffa-e44d-4266-8641-72f009f366b0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement style="Column header" x="450" y="1" width="63" height="13" forecolor="#FFFFFF" uuid="23614edf-5677-414d-984e-f43e63892522"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

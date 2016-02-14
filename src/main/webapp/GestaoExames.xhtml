@@ -49,7 +49,7 @@
 					<p:commandButton icon="ui-icon-trash" title="Excluir"
 						process="@this" update="rn-table msgs toolbar"
 						action="#{gestaoExamesBean.excluir}"
-						disabled="#{gestaoExamesBean.recemNascidoSelecionado == null}">
+						disabled="#{gestaoExamesBean.exameSelecionado}">
 
 						<p:confirm icon="ui-icon-alert" header="Confirmação de Exclusão"
 							message="Tem certeza que deseja excluir o recemNascido?" />

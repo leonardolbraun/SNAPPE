@@ -2,9 +2,9 @@ package br.ufmt.hujm.erp.model;
 
 public enum Temperatura {
 
-	TRINTACINCOSEIS("1. > 35,6ºC"), 
-	TRINTACINCOATRINTASEIS("2. 35 - 35,6ºC"),
-	TRINTACINCO("3. 35ºC");
+	T35V6("1. > 35,6ºC"), 
+	T35A35V6("2. 35 - 35,6ºC"),
+	T35("3. 35ºC");
 	
 	private String descricao;
 

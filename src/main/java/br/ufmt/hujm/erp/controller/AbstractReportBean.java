@@ -27,8 +27,8 @@ public abstract class AbstractReportBean {
 	}
 
 	private ExportOption exportOption = ExportOption.PDF;
-	private final String COMPILE_DIR = "/report/design/";
-	private String compileFileName = "visitante"; // name of your compiled
+	private final String COMPILE_DIR = "/resources/report/";
+	private String compileFileName = "SNAPPE"; // name of your compiled
 													// report file
 	private String message;
 

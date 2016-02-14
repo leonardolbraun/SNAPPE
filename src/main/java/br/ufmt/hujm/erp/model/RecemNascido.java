@@ -52,6 +52,7 @@ public class RecemNascido implements Serializable {
 	@Column(name = "rn_externo")
 	private Boolean rnExterno;
 	
+	@Enumerated(EnumType.STRING)
 	private Sexo sexoRn;
 	
 	@Column(name = "prontuario_mae", nullable = false, length = 18, unique = true)

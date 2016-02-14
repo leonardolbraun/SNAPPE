@@ -38,6 +38,11 @@
 						ajax="false" immediate="true">
 					</p:commandButton>
 
+
+					<p:commandButton value="Imprimir" id="imprimir-exame-button"
+						action="#{reportsBean.execute}" update="msgs exames-table"
+						ajax="false"/>
+
 				</f:facet>
 			</p:toolbar>
 			<p:dataTable value="#{gestaoExamesBean.todosExames}"
