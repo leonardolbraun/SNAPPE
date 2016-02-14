@@ -85,6 +85,8 @@
 
 
 							<div align="center">
+
+
 								<h1>SNAPPE II (Score for Neonatal Acute Physiology -
 									Perinatal Extension)</h1>
 								<h2>Escore de avalicação de gravidade clínica dos
@@ -94,16 +96,42 @@
 								<h3>(Considerar as primeiras 24 horas de vida, o pior
 									momento)</h3>
 								<br />
-							</div>
 
-							<br />
-							<br />
+								<h:panelGrid columns="2">
+								1) RN liberado para alojamento conjunto antes das 24h de
+								vida?
+								<h:selectBooleanCheckbox id="rnLiberado"
+										value="#{gestaoExamesBean.recemNascidoExames.rnLiberado}">
+										<p:ajax event="change" update="painel-exame-dialog" />
+									</h:selectBooleanCheckbox>
+
+								2) RN internado na UTI com mais de 48h de vida ou reinternado
+								após ter sido liberado?
+								<h:selectBooleanCheckbox id="rnInternado"
+										value="#{gestaoExamesBean.recemNascidoExames.rnInternado}">
+										<p:ajax event="change" update="painel-exame-dialog" />
+									</h:selectBooleanCheckbox>
+
+								3) RN moribundo sem indicação de suporte?
+								<h:selectBooleanCheckbox id="rnSemSuporte"
+										value="#{gestaoExamesBean.recemNascidoExames.rnSemSuporte}">
+										<p:ajax event="change" update="painel-exame-dialog" />
+									</h:selectBooleanCheckbox>
+
+								</h:panelGrid>
+								<h:outputLabel value="***Exame finalizado. Clique em Sair.***"
+									style="font-weight: bold; color: red;"
+									rendered="#{gestaoExamesBean.recemNascidoExames.rnSemSuporte or gestaoExamesBean.recemNascidoExames.rnInternado or gestaoExamesBean.recemNascidoExames.rnLiberado}" />
+
+							</div>
 
 							<div align="center">
 
-								<h:panelGrid columns="3">
+								<h:panelGrid columns="3"
+									rendered="#{not gestaoExamesBean.recemNascidoExames.rnSemSuporte and not gestaoExamesBean.recemNascidoExames.rnInternado and not gestaoExamesBean.recemNascidoExames.rnLiberado}">
 
-									<p:outputLabel value="Data do Exame" for="data-exame" />
+
+									<p:outputLabel id="data" value="Data do Exame" for="data-exame" />
 									<h:panelGroup>
 										<p:calendar id="data-exame" size="16" maxlength="16"
 											value="#{gestaoExamesBean.recemNascidoExames.dataExame}"
@@ -117,9 +145,7 @@
 										</p:commandButton>
 									</h:panelGroup>
 
-
 									<h:inputHidden />
-
 									<h:outputLabel value="Variável" />
 
 									<h:outputLabel value="Valores" />
@@ -279,7 +305,6 @@
 										style="float:right;" />
 									<h:outputLabel id="score" name="score"
 										value="#{gestaoExamesBean.recemNascidoExames.totalScore}" />
-
 								</h:panelGrid>
 
 							</div>
@@ -287,7 +312,8 @@
 
 							<div align="center">
 								<h:panelGrid>
-									<h:panelGrid columns="2">
+									<h:panelGrid columns="2"
+										rendered="#{not gestaoExamesBean.recemNascidoExames.rnSemSuporte and not gestaoExamesBean.recemNascidoExames.rnInternado and not gestaoExamesBean.recemNascidoExames.rnLiberado}">
 
 										<h:outputText value="Idade Gestacional" />
 
@@ -314,13 +340,21 @@
 								</h:panelGrid>
 							</div>
 
-							<p:commandButton value="Salvar" id="salvar-exame-button"
-								process="exame-dialog"
-								update="msgs-exame-dialog painel-exame-dialog rn-table edicaoRnDialog"
-								oncomplete="if(!args.validationFailed) PF('edicaoRnDialog').hide()"
-								ajax="false" actionListener="#{gestaoExamesBean.salvaExame}"
-								onclick="PF('edicaoRnDialog').hide(); " />
+							<h:panelGroup>
+								<p:commandButton value="Salvar" id="salvar-exame-button"
+									process="exame-dialog"
+									update="msgs-exame-dialog painel-exame-dialog rn-table edicaoRnDialog"
+									oncomplete="if(!args.validationFailed) PF('edicaoRnDialog').hide()"
+									ajax="false" actionListener="#{gestaoExamesBean.salvaExame}"
+									onclick="PF('edicaoRnDialog').hide();"
+									disabled="#{gestaoExamesBean.recemNascidoExames.rnSemSuporte or gestaoExamesBean.recemNascidoExames.rnInternado or gestaoExamesBean.recemNascidoExames.rnLiberado}" />
 
+								<p:commandButton value="Sair" id="sair-exame-button"
+									update="msgs-exame-dialog painel-exame-dialog rn-table edicaoRnDialog"
+									oncomplete="PF('edicaoRnDialog').hide()" ajax="false"
+									onclick="PF('edicaoRnDialog').hide(); " />
+
+							</h:panelGroup>
 							<br />
 
 							<h:panelGrid columns="3">
@@ -681,10 +715,16 @@
 				<p:ajax event="rowUnselect" update=":frm:toolbar" />
 
 				<f:facet name="header">
-					<p:outputPanel style="text-align:right">
+					<p:outputPanel style="text-align:left">
 						<h:outputText value="Pesquisar:" />
 						<p:inputText id="globalFilter" onkeyup="PF('rnTable').filter()"
 							style="width:150px" placeholder="Digite para pesquisar" />
+					</p:outputPanel>
+					
+					<p:outputPanel style="text-align:right">
+						<p:commandButton id="toggler" type="button" value="Colunas"
+							style="float:right" icon="ui-icon-note" />
+						<p:columnToggler datasource="rn-table" trigger="toggler" />
 					</p:outputPanel>
 				</f:facet>
 
@@ -756,7 +796,7 @@
 					<p:outputLabel />
 					<p:commandButton value="Salvar" id="salvar-button"
 						action="#{gestaoExamesBean.salvar}" process="rn-dialog"
-						update="msgs-dialog painel-dialog rn-table"
+						update="msgs-dialog painel-dialog rn-table painel-exame-dialog"
 						oncomplete="if(!args.validationFailed) PF('edicaoRnDialog').hide()">
 					</p:commandButton>
 				</h:panelGrid>

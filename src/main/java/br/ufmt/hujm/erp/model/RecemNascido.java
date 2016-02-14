@@ -59,7 +59,7 @@ public class RecemNascido implements Serializable {
 	
 	@Column(name = "idade_mae")
 	private String idadeMae;
-	
+
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}

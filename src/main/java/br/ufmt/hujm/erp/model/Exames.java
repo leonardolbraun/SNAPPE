@@ -79,6 +79,39 @@ public class Exames implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private IdadeGestacional idadeGestacional;
 	
+	@Column(name = "rn_liberado")
+	private Boolean rnLiberado;
+	
+	@Column(name = "rn_internado")
+	private Boolean rnInternado;
+	
+	@Column(name = "rn_semsuporte")
+	private Boolean rnSemSuporte;
+	
+	public Boolean getRnLiberado() {
+		return rnLiberado;
+	}
+
+	public void setRnLiberado(Boolean rnLiberado) {
+		this.rnLiberado = rnLiberado;
+	}
+
+	public Boolean getRnInternado() {
+		return rnInternado;
+	}
+
+	public void setRnInternado(Boolean rnInternado) {
+		this.rnInternado = rnInternado;
+	}
+
+	public Boolean getRnSemSuporte() {
+		return rnSemSuporte;
+	}
+
+	public void setRnSemSuporte(Boolean rnSemSuporte) {
+		this.rnSemSuporte = rnSemSuporte;
+	}
+
 	public String getTotalScore() {
 		return totalScore;
 	}
