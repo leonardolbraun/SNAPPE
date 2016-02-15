@@ -14,6 +14,10 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
+	<parameter name="urlImg1" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="urlImg2" class="java.lang.String"/>
 	<parameter name="idExame" class="java.lang.String">
 		<defaultValueExpression><![CDATA[$F{Exames_id}]]></defaultValueExpression>
 	</parameter>
@@ -33,6 +37,9 @@
      Exames.`total_score` AS Exames_total_score,
      Exames.`volumeUrinario` AS Exames_volumeUrinario,
      Exames.`recemNascido_id` AS Exames_recemNascido_id,
+     Exames.`rn_internado` AS Exames_rn_internado,
+     Exames.`rn_liberado` AS Exames_rn_liberado,
+     Exames.`rn_semsuporte` AS Exames_rn_semsuporte,
      RecemNascido.`id` AS RecemNascido_id,
      RecemNascido.`data_nascimento` AS RecemNascido_data_nascimento,
      RecemNascido.`idade_mae` AS RecemNascido_idade_mae,
@@ -41,40 +48,9 @@
      RecemNascido.`prontuario_mae` AS RecemNascido_prontuario_mae,
      RecemNascido.`recemNascidoDe_de` AS RecemNascido_recemNascidoDe_de,
      RecemNascido.`rn_externo` AS RecemNascido_rn_externo,
-     Exames.`rn_internado` AS Exames_rn_internado,
-     Exames.`rn_liberado` AS Exames_rn_liberado,
-     Exames.`rn_semsuporte` AS Exames_rn_semsuporte,
-     RecemNascido_A.`id` AS RecemNascido_A_id,
-     RecemNascido_A.`data_nascimento` AS RecemNascido_A_data_nascimento,
-     RecemNascido_A.`idade_mae` AS RecemNascido_A_idade_mae,
-     RecemNascido_A.`nome_paciente` AS RecemNascido_A_nome_paciente,
-     RecemNascido_A.`prontuario` AS RecemNascido_A_prontuario,
-     RecemNascido_A.`prontuario_mae` AS RecemNascido_A_prontuario_mae,
-     RecemNascido_A.`recemNascidoDe_de` AS RecemNascido_A_recemNascidoDe_de,
-     RecemNascido_A.`rn_externo` AS RecemNascido_A_rn_externo,
-     Exames_A.`id` AS Exames_A_id,
-     Exames_A.`apgarDeCincoMinutos` AS Exames_A_apgarDeCincoMinutos,
-     Exames_A.`convulsoesMultiplas` AS Exames_A_convulsoesMultiplas,
-     Exames_A.`data_exame` AS Exames_A_data_exame,
-     Exames_A.`idadeGestacional` AS Exames_A_idadeGestacional,
-     Exames_A.`pesoAoNascer` AS Exames_A_pesoAoNascer,
-     Exames_A.`phDoSangue` AS Exames_A_phDoSangue,
-     Exames_A.`pig` AS Exames_A_pig,
-     Exames_A.`pressaoArterialMedia` AS Exames_A_pressaoArterialMedia,
-     Exames_A.`razao` AS Exames_A_razao,
-     Exames_A.`rn_internado` AS Exames_A_rn_internado,
-     Exames_A.`rn_liberado` AS Exames_A_rn_liberado,
-     Exames_A.`rn_semsuporte` AS Exames_A_rn_semsuporte,
-     Exames_A.`temperatura` AS Exames_A_temperatura,
-     Exames_A.`total_score` AS Exames_A_total_score,
-     Exames_A.`volumeUrinario` AS Exames_A_volumeUrinario,
-     Exames_A.`recemNascido_id` AS Exames_A_recemNascido_id,
-     RecemNascido.`sexoRn` AS RecemNascido_sexoRn,
-     RecemNascido_A.`sexoRn` AS RecemNascido_A_sexoRn
+     RecemNascido.`sexoRn` AS RecemNascido_sexoRn
 FROM
-     `RecemNascido` RecemNascido INNER JOIN `Exames` Exames_A ON RecemNascido.`id` = Exames_A.`recemNascido_id`,
-     `Exames` Exames,
-     `RecemNascido` RecemNascido_A
+	`RecemNascido` RecemNascido INNER JOIN `Exames` Exames ON RecemNascido.`id` = Exames.`recemNascido_id`
 WHERE
     Exames.id = $P{idExame}]]>
 	</queryString>
@@ -92,6 +68,9 @@ WHERE
 	<field name="Exames_total_score" class="java.lang.String"/>
 	<field name="Exames_volumeUrinario" class="java.lang.String"/>
 	<field name="Exames_recemNascido_id" class="java.lang.Long"/>
+	<field name="Exames_rn_internado" class="java.lang.Boolean"/>
+	<field name="Exames_rn_liberado" class="java.lang.Boolean"/>
+	<field name="Exames_rn_semsuporte" class="java.lang.Boolean"/>
 	<field name="RecemNascido_id" class="java.lang.Long"/>
 	<field name="RecemNascido_data_nascimento" class="java.sql.Timestamp"/>
 	<field name="RecemNascido_idade_mae" class="java.lang.String"/>
@@ -100,36 +79,7 @@ WHERE
 	<field name="RecemNascido_prontuario_mae" class="java.lang.String"/>
 	<field name="RecemNascido_recemNascidoDe_de" class="java.lang.String"/>
 	<field name="RecemNascido_rn_externo" class="java.lang.Boolean"/>
-	<field name="Exames_rn_internado" class="java.lang.Boolean"/>
-	<field name="Exames_rn_liberado" class="java.lang.Boolean"/>
-	<field name="Exames_rn_semsuporte" class="java.lang.Boolean"/>
-	<field name="RecemNascido_A_id" class="java.lang.Long"/>
-	<field name="RecemNascido_A_data_nascimento" class="java.sql.Timestamp"/>
-	<field name="RecemNascido_A_idade_mae" class="java.lang.String"/>
-	<field name="RecemNascido_A_nome_paciente" class="java.lang.String"/>
-	<field name="RecemNascido_A_prontuario" class="java.lang.String"/>
-	<field name="RecemNascido_A_prontuario_mae" class="java.lang.String"/>
-	<field name="RecemNascido_A_recemNascidoDe_de" class="java.lang.String"/>
-	<field name="RecemNascido_A_rn_externo" class="java.lang.Boolean"/>
-	<field name="Exames_A_id" class="java.lang.Long"/>
-	<field name="Exames_A_apgarDeCincoMinutos" class="java.lang.String"/>
-	<field name="Exames_A_convulsoesMultiplas" class="java.lang.String"/>
-	<field name="Exames_A_data_exame" class="java.sql.Timestamp"/>
-	<field name="Exames_A_idadeGestacional" class="java.lang.String"/>
-	<field name="Exames_A_pesoAoNascer" class="java.lang.String"/>
-	<field name="Exames_A_phDoSangue" class="java.lang.String"/>
-	<field name="Exames_A_pig" class="java.lang.String"/>
-	<field name="Exames_A_pressaoArterialMedia" class="java.lang.String"/>
-	<field name="Exames_A_razao" class="java.lang.String"/>
-	<field name="Exames_A_rn_internado" class="java.lang.Boolean"/>
-	<field name="Exames_A_rn_liberado" class="java.lang.Boolean"/>
-	<field name="Exames_A_rn_semsuporte" class="java.lang.Boolean"/>
-	<field name="Exames_A_temperatura" class="java.lang.String"/>
-	<field name="Exames_A_total_score" class="java.lang.String"/>
-	<field name="Exames_A_volumeUrinario" class="java.lang.String"/>
-	<field name="Exames_A_recemNascido_id" class="java.lang.Long"/>
 	<field name="RecemNascido_sexoRn" class="java.lang.String"/>
-	<field name="RecemNascido_A_sexoRn" class="java.lang.String"/>
 	<group name="Group1">
 		<groupExpression><![CDATA[(int)($V{REPORT_COUNT}/15)]]></groupExpression>
 		<groupHeader>
@@ -169,12 +119,12 @@ WHERE
 				<text><![CDATA[SNAP-PE II]]></text>
 			</staticText>
 			<image>
-				<reportElement x="9" y="20" width="146" height="42" uuid="7f3b977e-ea88-4c41-90e5-8ca9b7bdc2a9"/>
-				<imageExpression><![CDATA["/Users/leonardo/Pictures/ebserh.png"]]></imageExpression>
+				<reportElement x="389" y="10" width="160" height="70" uuid="31326438-cc62-4d11-bda7-88a4dbddb9ca"/>
+				<imageExpression><![CDATA[$P{urlImg2}]]></imageExpression>
 			</image>
 			<image>
-				<reportElement x="389" y="10" width="160" height="70" uuid="31326438-cc62-4d11-bda7-88a4dbddb9ca"/>
-				<imageExpression><![CDATA["/Users/leonardo/Pictures/logohujm.jpg"]]></imageExpression>
+				<reportElement x="4" y="10" width="162" height="60" uuid="1923fd04-f97c-4240-8304-2e136f3b3b24"/>
+				<imageExpression><![CDATA[$P{urlImg1}]]></imageExpression>
 			</image>
 		</band>
 	</title>
@@ -357,7 +307,7 @@ $F{Exames_pressaoArterialMedia} == "MENOR20" ? "menor 20 mmHg" : "Sem dados")]]>
 					<textElement>
 						<font size="14" isBold="true" pdfFontName="Times-Bold"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{RecemNascido_A_sexoRn}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{RecemNascido_sexoRn}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement style="Detail" positionType="Float" x="166" y="90" width="300" height="18" uuid="b8ad5216-1cd9-41af-be9d-a4a044807198"/>
