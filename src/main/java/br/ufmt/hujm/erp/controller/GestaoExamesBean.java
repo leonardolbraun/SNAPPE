@@ -35,9 +35,9 @@ import br.ufmt.hujm.erp.repository.RecemNascidoDAO;
 import br.ufmt.hujm.erp.service.CadastroRecemNascidoService;
 import br.ufmt.hujm.erp.util.FacesMessages;
 
-//@Named
+@Named
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class GestaoExamesBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -124,7 +124,6 @@ public class GestaoExamesBean implements Serializable {
 
 	public void setExameSelecionado(Exames exameSelecionado) {
 		this.exameSelecionado = exameSelecionado;
-		System.out.println("CLICOUUUUUU" + this.exameSelecionado.getTotalScore());
 	}
 
 	public void salvaExame() {

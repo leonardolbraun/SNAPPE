@@ -28,9 +28,9 @@ public class ReportsBean extends AbstractReportBean implements Serializable {
 	
 	Long id = new Long(2);
 
-	ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-	HttpSession session = (HttpSession) externalContext.getSession(true);
-	GestaoExamesBean gestaoExamesBean= (GestaoExamesBean)session.getAttribute("gestaoExamesBean");
+	//ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	//HttpSession session = (HttpSession) externalContext.getSession(true);
+	//GestaoExamesBean gestaoExamesBean= (GestaoExamesBean)session.getAttribute("gestaoExamesBean");
 
 	@Override
 	protected String getCompileFileName() {
@@ -46,19 +46,19 @@ public class ReportsBean extends AbstractReportBean implements Serializable {
 		return reportParameters;
 	}
 
-	Long idExame = new Long(1);
+	Long idExame = new Long(0);
 
 	public Long idExameSelecionado() {
 		
 		
-		System.out.println("ESTA AQUIIIII: " + gestaoExamesBean.getExameSelecionado().getTotalScore().toString());
+		//System.out.println("ESTA AQUIIIII: " + gestaoExamesBean.getExameSelecionado().getTotalScore().toString());
 		
 		return idExame;
 	}
 
-	public String execute() {
+	public String execute(Long id) {
 		try {
-			id = idExameSelecionado();
+			this.id = id;//sExameSelecionado();
 			super.prepareReport();
 		} catch (Exception e) {
 			// criar a exception

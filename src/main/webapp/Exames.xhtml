@@ -40,7 +40,7 @@
 
 
 					<p:commandButton value="Imprimir" id="imprimir-exame-button"
-						action="#{reportsBean.execute}" update="msgs exames-table"
+				disabled="#{gestaoExamesBean.exameSelecionado eq null}"		action="#{reportsBean.execute(gestaoExamesBean.exameSelecionado.id)}" update="msgs exames-table"
 						ajax="false"/>
 
 				</f:facet>
